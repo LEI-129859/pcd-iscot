@@ -23,3 +23,11 @@
 hs_err_pid*
 replay_pid*
 /bin/
+
+
+# VSCode directories
+.vscode/
+.idea/
+*.iml
+out/
+bin/
