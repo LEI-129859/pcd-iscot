@@ -1,66 +1,36 @@
 package iscot.client;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import iscot.client.gui.LightIcon;
 import iscot.client.gui.VentilatorIcon;
 import iscot.enums.Areas;
-import iscot.enums.Type;
+import iscot.events.order.AreaVentilationOrderEvent;
+import iscot.events.order.HighLevelOrderEvent;
 
-public class Ventilator {
+public class Ventilator extends ActuatorWindow {
+	private final VentilatorIcon icone;
 
-	/**
-	 * 
-	 * @param server address and port
-	 * @param roomName: string
-	 * @throws IOException 
-	 * @throws UnknownHostException 
-	 * @throws NumberFormatException 
-	 * @throws InterruptedException 
-	 * @throws ClassNotFoundException 
-	 */
-	public static void main(String[] args) throws NumberFormatException, UnknownHostException, IOException, InterruptedException, ClassNotFoundException {
-		if(args.length!=3) {
-			System.err.println("Invalid arguments!");
+	public Ventilator(Areas area) { this(area, new VentilatorIcon()); }
+	private Ventilator(Areas area, VentilatorIcon icone) {
+		super("Ventilador", area, icone);
+		this.icone = icone;
+	}
+
+	@Override
+	protected void apply(HighLevelOrderEvent event) {
+		if (event instanceof AreaVentilationOrderEvent) {
+			AreaVentilationOrderEvent o = (AreaVentilationOrderEvent) event;
+			icone.setLigado(o.isActive());
+			history.log(o.isActive() ? "Ventilador ligado" : "Ventilador desligado");
 		}
-		else {
-			// TODO connect to server
-			
-			// TODO register with the server
-			Areas area=Areas.valueOf(args[2]);
-			
-			JFrame janela = new JFrame("Ventilador em "+area);
-			janela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	}
 
-		
-			
-			// Criar os componentes gráficos
-			JPanel painel=new JPanel();
-			painel.setLayout(new BorderLayout());
-			VentilatorIcon ventilator = new VentilatorIcon();
-			painel.add(ventilator,BorderLayout.CENTER);
-			janela.setContentPane(painel);
-			janela.setLocation(600, 400);
-			janela.setMinimumSize(janela.getSize());
-			janela.pack();
-			janela.setVisible(true);
-			
-			Thread.sleep(5000);
-			ventilator.setAtivo(true);
-
-			// TODO: receive and handle messages from server
-			
-			// TODO: for first phase: create an appropriate event hardcoded locally and change the GUI accordingly
-		}
+	public static void main(String[] args) throws InterruptedException {
+		if (args.length != 3) { System.err.println("Invalid arguments!"); return; }
+		Areas area = Areas.valueOf(args[2]);
+		Ventilator v = new Ventilator(area);
+		v.mostrar();
+		Thread.sleep(2000);
+		v.receive(new AreaVentilationOrderEvent(area, true));
+		Thread.sleep(2000);
+		v.receive(new AreaVentilationOrderEvent(area, false));
 	}
 }
