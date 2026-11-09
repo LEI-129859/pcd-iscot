@@ -1,4 +1,21 @@
 package iscot.events.order;
 
-public class AreaVentilationOrderEvent {
+import iscot.enums.Areas;
+
+public class AreaVentilationOrderEvent extends HighLevelOrderEvent {
+    private static final long serialVersionUID = 1L;
+
+    private final boolean active;   // ligar ou desligar a ventilação
+
+    public AreaVentilationOrderEvent(Areas area, boolean active) {
+        super(area);
+        this.active = active;
+    }
+
+    public boolean isActive() { return active; }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", active=" + active + "]";
+    }
 }
