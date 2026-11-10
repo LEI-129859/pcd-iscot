@@ -6,8 +6,8 @@ import iscot.enums.Areas;
 public class AreaTemperatureOrderEvent extends HighLevelOrderEvent {
     private static final long serialVersionUID = 1L;
 
-    private final AirConditioningMode mode;  // Ventilação, Frio, Aquecimento ou Desligado
-    private final double temperature;        // 16 a 30 °C, como no ACIcon
+    private final AirConditioningMode mode;
+    private final double temperature;     
 
     public AreaTemperatureOrderEvent(Areas area, AirConditioningMode mode, double temperature) {
         super(area);
