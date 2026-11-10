@@ -5,8 +5,8 @@ import iscot.enums.Areas;
 public class AreaLightingOrderEvent extends HighLevelOrderEvent {
     private static final long serialVersionUID = 1L;
 
-    private final boolean active;    // acender ou apagar
-    private final int intensity;     // 0 a 100, como no LightIcon
+    private final boolean active;    
+    private final int intensity;     
 
     public AreaLightingOrderEvent(Areas area, boolean active, int intensity) {
         super(area);
