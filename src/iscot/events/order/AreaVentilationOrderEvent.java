@@ -5,7 +5,7 @@ import iscot.enums.Areas;
 public class AreaVentilationOrderEvent extends HighLevelOrderEvent {
     private static final long serialVersionUID = 1L;
 
-    private final boolean active;   // ligar ou desligar a ventilação
+    private final boolean active;  
 
     public AreaVentilationOrderEvent(Areas area, boolean active) {
         super(area);
